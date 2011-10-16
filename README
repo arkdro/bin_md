@@ -1,0 +1,38 @@
+converts binary to hex representation.
+
+Example:
+
+data:
+<<1,18,35,52,69>> (which is equal to <<16#01,16#12,16#23,16#34,16#45>>)
+
+hex representation:
+<<"0112233445">>
+
+call:
+bin_md:to_bin_text(<<1,18,35,52,69>>) -> <<"0112233445">>
+
+Works little faster than ssl_debug.erl because prints hex data only
+without text. Sometimes the hex hash is the only thing you need.
+
+The sd2 module used in tests is just a copy of
+ssl_debug.erl from OTP compiled with 'export_all'.
+The sd2b module used in tests is a copy of
+ssl_debug.erl with asciify/1 replaced with a stub.
+
+You can use, reuse and abuse this code.
+
+Time:
+
+1)
+  for sd2 (hex_asc/0 calls both hexify/1 and asciify/1):
+  cmp_hex:batch(100000) -> {100000,3.018612,6.330802}
+
+  to_bin_text - 3 s
+  hex_asc (from ssl_debug) - 6.3 s
+
+2)
+  for sd2b (hex_asc/0 calls only hexify/1):
+  cmp_hex:batch(100000) -> {100000,2.998139,5.421503}
+
+  to_bin_text - 3 s
+  hex_asc (from ssl_debug) - 5.4 s
